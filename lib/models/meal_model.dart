@@ -24,7 +24,6 @@ class MealSummary {
   }
 }
 
-
 class Ingredient {
   final String name;
   final String measure;

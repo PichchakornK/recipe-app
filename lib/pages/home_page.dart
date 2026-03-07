@@ -3,6 +3,8 @@ import '../controllers/home_controller.dart';
 import '../models/meal_model.dart';
 import 'recipe_detail_page.dart';
 import 'saved_recipes_page.dart';
+import 'create_recipe_page.dart';
+import 'my_recipes_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,6 +36,24 @@ class _HomePageState extends State<HomePage> {
       listenable: _controller,
       builder: (context, child) {
         return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CreateRecipePage(),
+                ),
+              ).then((result) {
+                if (result == true) {
+                  // Reload recipes ถ้าสร้างสำเร็จ
+                  _controller.initLoad();
+                }
+              });
+            },
+            backgroundColor: const Color(0xFFFF6B35),
+            child: const Icon(Icons.add, color: Colors.white),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Column(
@@ -66,10 +86,28 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.grey.shade200,
-                        child: const Icon(Icons.person, color: Colors.grey),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const MyRecipesPage(),
+                                ),
+                              ).then((_) => _controller.initLoad());
+                            },
+                            icon: const Icon(
+                              Icons.menu_book,
+                              color: Color(0xFFFF6B35),
+                            ),
+                          ),
+                          CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Colors.grey.shade200,
+                            child: const Icon(Icons.person, color: Colors.grey),
+                          ),
+                        ],
                       ),
                     ],
                   ),
