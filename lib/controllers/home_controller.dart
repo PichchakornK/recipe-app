@@ -39,7 +39,9 @@ class HomeController extends ChangeNotifier {
       }
     } finally {
       isLoadingCategories = false;
-      notifyListeners();
+      if (hasListeners) {
+        notifyListeners();
+      }
       fetchMeals(); // โหลดอาหารของหมวดหมู่แรกต่อทันที
     }
   }
@@ -47,12 +49,16 @@ class HomeController extends ChangeNotifier {
   Future<void> loadSavedStatus() async {
     final savedMeals = await _apiService.fetchSavedRecipes();
     savedMealIds = savedMeals.map((m) => m.id).toSet();
-    notifyListeners();
+    if (hasListeners) {
+      notifyListeners();
+    }
   }
 
   Future<void> fetchMeals() async {
     isLoadingMeals = true;
-    notifyListeners();
+    if (hasListeners) {
+      notifyListeners();
+    }
 
     try {
       if (searchQuery.isNotEmpty) {
@@ -62,7 +68,9 @@ class HomeController extends ChangeNotifier {
       }
     } finally {
       isLoadingMeals = false;
-      notifyListeners();
+      if (hasListeners) {
+        notifyListeners();
+      }
     }
   }
 
@@ -95,13 +103,19 @@ class HomeController extends ChangeNotifier {
       final success = await _apiService.unsaveRecipe(mealId);
       if (success) {
         savedMealIds.remove(mealId);
-        notifyListeners();
+        if (hasListeners) {
+          notifyListeners();
+        }
+        await loadSavedStatus();
       }
     } else {
       final success = await _apiService.saveRecipe(mealId);
       if (success) {
         savedMealIds.add(mealId);
-        notifyListeners();
+        if (hasListeners) {
+          notifyListeners();
+        }
+        await loadSavedStatus();
       }
     }
   }

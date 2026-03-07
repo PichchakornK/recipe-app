@@ -7,10 +7,12 @@ class RegisterController extends ChangeNotifier {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   bool _isLoading = false;
-  bool get isLoading => _isLoading; // ให้ UI ดึงค่าไปใช้ได้เท่านั้น ป้องกันการแก้ค่าโดยตรง
+  bool get isLoading =>
+      _isLoading; // ให้ UI ดึงค่าไปใช้ได้เท่านั้น ป้องกันการแก้ค่าโดยตรง
 
   // ฟังก์ชันสำหรับจัดการการโหลดและแจ้งให้ UI อัปเดต
   void _setLoading(bool value) {
@@ -34,7 +36,9 @@ class RegisterController extends ChangeNotifier {
 
     _setLoading(true);
 
-    final String baseUrl = kIsWeb ? 'http://localhost:8080' : 'http://10.0.2.2:8080';
+    final String baseUrl = kIsWeb
+        ? 'http://localhost:8080'
+        : 'http://10.0.2.2:8080';
     final url = Uri.parse('$baseUrl/auth/create');
 
     try {
@@ -67,7 +71,7 @@ class RegisterController extends ChangeNotifier {
     } catch (e) {
       if (!context.mounted) return;
       _showSnackBar(context, "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
-      print("Error: $e");
+      debugPrint("Error: $e");
     } finally {
       _setLoading(false);
     }

@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/meal_model.dart';
 
 class ApiService {
-  // ตั้งค่า URL ให้ชี้ไปที่ Backend 
+  // ตั้งค่า URL ให้ชี้ไปที่ Backend
   String get baseUrl {
     return kIsWeb ? 'http://localhost:8080' : 'http://10.0.2.2:8080';
   }
@@ -44,12 +45,12 @@ class ApiService {
         throw Exception('Failed to load meals from Backend');
       }
     } catch (e) {
-      print('Error Fetching from Backend: $e');
+      debugPrint('Error Fetching from Backend: $e');
       return [];
     }
   }
 
-Future<List<Map<String, dynamic>>> fetchCategories() async {
+  Future<List<Map<String, dynamic>>> fetchCategories() async {
     final url = Uri.parse('$baseUrl/recipe/categories');
 
     try {
@@ -57,22 +58,22 @@ Future<List<Map<String, dynamic>>> fetchCategories() async {
 
       if (response.statusCode == 200) {
         final dynamic data = jsonDecode(response.body);
-        
+
         // รับข้อมูลเป็นรูปแบบ Map (Object) แทน String ธรรมดา
         if (data['categories'] != null) {
           return List<Map<String, dynamic>>.from(data['categories']);
         }
         return [];
       } else {
-        print('Backend Error: ${response.statusCode} - ${response.body}');
+        debugPrint('Backend Error: ${response.statusCode} - ${response.body}');
         throw Exception('Failed to load categories');
       }
     } catch (e) {
-      print('Connection Error: $e');
+      debugPrint('Connection Error: $e');
       return [];
     }
   }
- 
+
   Future<RecipeDetail?> fetchRecipeDetails(String idMeal) async {
     final url = Uri.parse('$baseUrl/recipe/search/$idMeal');
 
@@ -83,11 +84,11 @@ Future<List<Map<String, dynamic>>> fetchCategories() async {
         final dynamic data = jsonDecode(response.body);
         return RecipeDetail.fromJson(data);
       } else {
-        print('Backend Error: ${response.statusCode}');
+        debugPrint('Backend Error: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      print('Connection Error: $e');
+      debugPrint('Connection Error: $e');
       return null;
     }
   }
@@ -110,7 +111,9 @@ Future<List<Map<String, dynamic>>> fetchCategories() async {
           "Content-Type": "application/json",
           if (token != null) "Authorization": "Bearer $token",
         },
-        body: jsonEncode({"idMeal": idMeal}), // ส่ง idMeal ไปตามที่ Backend รอรับ
+        body: jsonEncode({
+          "idMeal": idMeal,
+        }), // ส่ง idMeal ไปตามที่ Backend รอรับ
       );
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
@@ -126,9 +129,7 @@ Future<List<Map<String, dynamic>>> fetchCategories() async {
     try {
       final response = await http.delete(
         url,
-        headers: {
-          if (token != null) "Authorization": "Bearer $token",
-        },
+        headers: {if (token != null) "Authorization": "Bearer $token"},
       );
       return response.statusCode == 200;
     } catch (e) {
@@ -138,15 +139,13 @@ Future<List<Map<String, dynamic>>> fetchCategories() async {
 
   // ดึงรายการที่เคยเซฟไว้ทั้งหมด
   Future<List<MealSummary>> fetchSavedRecipes() async {
-    final url = Uri.parse('$baseUrl/recipe/saved-recipes');
+    final url = Uri.parse('$baseUrl/recipe/saved-recipe');
     final token = await _getToken();
 
     try {
       final response = await http.get(
         url,
-        headers: {
-          if (token != null) "Authorization": "Bearer $token",
-        },
+        headers: {if (token != null) "Authorization": "Bearer $token"},
       );
 
       if (response.statusCode == 200) {
@@ -159,7 +158,6 @@ Future<List<Map<String, dynamic>>> fetchCategories() async {
     }
   }
 
-  
   // ค้นหาเมนูอาหาร (GET /recipe/get?q=คำค้นหา)
   Future<List<MealSummary>> searchRecipes(String query) async {
     final url = Uri.parse('$baseUrl/recipe/get?q=$query');
@@ -184,7 +182,7 @@ Future<List<Map<String, dynamic>>> fetchCategories() async {
         return [];
       }
     } catch (e) {
-      print('Error Searching Recipes: $e');
+      debugPrint('Error Searching Recipes: $e');
       return [];
     }
   }
