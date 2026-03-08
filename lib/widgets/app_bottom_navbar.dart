@@ -20,19 +20,22 @@ class AppBottomNavBar extends StatelessWidget {
         if (index == currentIndex) return;
 
         if (index == 0) {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const SavedRecipesPage()),
+            (route) => false,
           );
         } else if (index == 1) {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
+            (route) => false,
           );
         } else if (index == 2) {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const ProfilePage()),
+            (route) => false,
           );
         }
       },
