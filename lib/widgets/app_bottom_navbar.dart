@@ -17,24 +17,25 @@ class AppBottomNavBar extends StatelessWidget {
       unselectedItemColor: Colors.grey,
       currentIndex: currentIndex,
       onTap: (int index) {
-        // ถ้ากดที่เมนูเดิม ไม่ต้องทำอะไร
         if (index == currentIndex) return;
 
         if (index == 0) {
-          // ใช้ pushReplacement เพื่อไม่ให้ Stack หน้าจอซ้อนกันจนย้อนกลับลำบาก
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const SavedRecipesPage()),
+            (route) => route.settings.name == '/home' || route.isFirst,
           );
         } else if (index == 1) {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
+            (route) => false,
           );
         } else if (index == 2) {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const ProfilePage()),
+            (route) => route.isFirst,
           );
         }
       },
