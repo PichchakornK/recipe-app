@@ -17,7 +17,7 @@ class SavedRecipesController extends ChangeNotifier {
       final meals = await _apiService.fetchSavedRecipes();
       savedMeals = meals;
     } catch (e) {
-      print("Error loading saved recipes: $e");
+      debugPrint("Error loading saved recipes: $e");
       savedMeals = [];
     } finally {
       isLoading = false;
