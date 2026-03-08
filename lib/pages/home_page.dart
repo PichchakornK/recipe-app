@@ -3,6 +3,9 @@ import '../controllers/home_controller.dart';
 import '../models/meal_model.dart';
 import 'recipe_detail_page.dart';
 import 'saved_recipes_page.dart';
+import 'profile_page.dart';
+import '../controllers/user_controller.dart';
+import '../widgets/app_bottom_navbar.dart';
 import 'create_recipe_page.dart';
 import 'my_recipes_page.dart';
 
@@ -15,12 +18,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final HomeController _controller;
+  final UserController _userController = UserController();
 
   @override
   void initState() {
     super.initState();
     _controller = HomeController();
     _controller.initLoad();
+    _userController.loadUserData();
   }
 
   @override
@@ -54,6 +59,7 @@ class _HomePageState extends State<HomePage> {
             child: const Icon(Icons.add, color: Colors.white),
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          bottomNavigationBar: const AppBottomNavBar(currentIndex: 1),
           backgroundColor: Colors.white,
           body: SafeArea(
             child: Column(
@@ -108,6 +114,39 @@ class _HomePageState extends State<HomePage> {
                             child: const Icon(Icons.person, color: Colors.grey),
                           ),
                         ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // นำทางไปหน้า ProfilePage เมื่อกดที่รูป
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProfilePage(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Colors.grey.shade200,
+                          // แสดงผลตามลำดับ: รูปที่เลือกใหม่ > รูปจาก Server > ไอคอนพื้นฐาน
+                          backgroundImage: _userController.imageFile != null
+                              ? FileImage(_userController.imageFile!) //
+                              : (_userController.profileImage != null
+                                        ? NetworkImage(
+                                            _userController.profileImage!,
+                                          ) //
+                                        : null)
+                                    as ImageProvider?,
+                          child:
+                              (_userController.imageFile == null &&
+                                  _userController.profileImage == null)
+                              ? const Icon(
+                                  Icons.person,
+                                  size: 25,
+                                  color: Colors.grey,
+                                )
+                              : null,
+                        ),
                       ),
                     ],
                   ),
@@ -260,38 +299,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-          ),
-
-          // Bottom Navigation Bar
-          bottomNavigationBar: BottomNavigationBar(
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            selectedItemColor: const Color(0xFFFF6B35),
-            unselectedItemColor: Colors.grey,
-            currentIndex: 1, // Home เป็นค่าเริ่มต้น
-            onTap: (int index) {
-              if (index == 0) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SavedRecipesPage(),
-                  ),
-                ).then((_) {
-                  _controller.loadSavedStatus(); // รีเฟรชหัวใจตอนกลับมา
-                });
-              }
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.favorite_border),
-                label: "",
-              ),
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                label: "",
-              ),
-            ],
           ),
         );
       },

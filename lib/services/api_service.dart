@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,7 +48,7 @@ class ApiService {
         throw Exception('Failed to load meals from Backend');
       }
     } catch (e) {
-      print('Error Fetching from Backend: $e');
+      debugPrint('Error Fetching from Backend: $e');
       return [];
     }
   }
@@ -67,11 +68,11 @@ class ApiService {
         }
         return [];
       } else {
-        print('Backend Error: ${response.statusCode} - ${response.body}');
+        debugPrint('Backend Error: ${response.statusCode} - ${response.body}');
         throw Exception('Failed to load categories');
       }
     } catch (e) {
-      print('Connection Error: $e');
+      debugPrint('Connection Error: $e');
       return [];
     }
   }
@@ -86,11 +87,11 @@ class ApiService {
         final dynamic data = jsonDecode(response.body);
         return RecipeDetail.fromJson(data);
       } else {
-        print('Backend Error: ${response.statusCode}');
+        debugPrint('Backend Error: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      print('Connection Error: $e');
+      debugPrint('Connection Error: $e');
       return null;
     }
   }
@@ -184,7 +185,7 @@ class ApiService {
         return [];
       }
     } catch (e) {
-      print('Error Searching Recipes: $e');
+      debugPrint('Error Searching Recipes: $e');
       return [];
     }
   }

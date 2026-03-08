@@ -24,7 +24,7 @@ class RecipeDetailController extends ChangeNotifier {
       }
     } catch (e) {
       errorMessage = "เกิดข้อผิดพลาดในการโหลดข้อมูล";
-      print("Error loading recipe details: $e");
+      debugPrint("Error loading recipe details: $e");
     } finally {
       isLoading = false;
       notifyListeners();

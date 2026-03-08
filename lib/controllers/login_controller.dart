@@ -19,14 +19,17 @@ class LoginController extends ChangeNotifier {
   }
 
   Future<void> handleLogin(BuildContext context) async {
-    if (emailController.text.trim().isEmpty || passwordController.text.isEmpty) {
+    if (emailController.text.trim().isEmpty ||
+        passwordController.text.isEmpty) {
       _showSnackBar(context, "กรุณากรอกอีเมลและรหัสผ่าน");
       return;
     }
 
     _setLoading(true);
 
-    final String baseUrl = kIsWeb ? 'http://localhost:8080' : 'http://10.0.2.2:8080';
+    final String baseUrl = kIsWeb
+        ? 'http://localhost:8080'
+        : 'http://10.0.2.2:8080';
     final url = Uri.parse('$baseUrl/auth/login');
 
     try {
@@ -51,6 +54,7 @@ class LoginController extends ChangeNotifier {
         // บันทึก Token ลง SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
+        debugPrint('token: $token');
 
         if (!context.mounted) return;
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../controllers/saved_recipes_controller.dart'; 
+import '../controllers/saved_recipes_controller.dart';
 import 'recipe_detail_page.dart';
+import '../widgets/app_bottom_navbar.dart';
 
 class SavedRecipesPage extends StatefulWidget {
   const SavedRecipesPage({super.key});
@@ -30,8 +31,12 @@ class _SavedRecipesPageState extends State<SavedRecipesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: const AppBottomNavBar(currentIndex: 0),
       appBar: AppBar(
-        title: const Text('Saved Recipes', style: TextStyle(color: Colors.black)),
+        title: const Text(
+          'Saved Recipes',
+          style: TextStyle(color: Colors.black),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -40,7 +45,6 @@ class _SavedRecipesPageState extends State<SavedRecipesPage> {
       body: ListenableBuilder(
         listenable: _controller,
         builder: (context, child) {
-          
           // 1. ถ้ากำลังโหลดข้อมูล
           if (_controller.isLoading) {
             return const Center(
@@ -86,10 +90,7 @@ class _SavedRecipesPageState extends State<SavedRecipesPage> {
                   ),
                   subtitle: Text(
                     '${meal.category}',
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 13,
-                    ),
+                    style: const TextStyle(color: Colors.grey, fontSize: 13),
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.favorite, color: Colors.red),
