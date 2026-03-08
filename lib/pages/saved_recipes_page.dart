@@ -48,12 +48,12 @@ class _SavedRecipesPageState extends State<SavedRecipesPage> {
             );
           }
 
-          // 2. ถ้าไม่มีข้อมูล
+          // ถ้าไม่มีข้อมูล
           if (_controller.savedMeals.isEmpty) {
             return const Center(child: Text('ไม่มีเมนูที่บันทึกไว้'));
           }
 
-          // 3. ถ้ามีข้อมูล ให้แสดงผลเป็น ListView
+          // ถ้ามีข้อมูล ให้แสดงผลเป็น ListView
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: _controller.savedMeals.length,

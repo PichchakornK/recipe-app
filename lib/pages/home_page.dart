@@ -298,7 +298,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //  Widget การ์ดอาหารแยกออกมาให้ดูคลีนขึ้น
+  //  Widget การ์ดอาหาร
   Widget _buildRecipeCard(MealSummary meal) {
     bool isSaved = _controller.savedMealIds.contains(meal.id);
 
