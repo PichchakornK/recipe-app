@@ -31,7 +31,9 @@ class LoginController extends ChangeNotifier {
         ? 'http://localhost:8080'
         : 'http://10.0.2.2:8080';
     final url = Uri.parse('$baseUrl/auth/login');
-
+    print('kIsWeb: $kIsWeb');
+    print('baseUrl: $baseUrl');
+    print('url: $url');
     try {
       final response = await http.post(
         url,
@@ -59,9 +61,10 @@ class LoginController extends ChangeNotifier {
         if (!context.mounted) return;
 
         // ไปหน้า HomePage และปิดหน้า Login ทิ้ง
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const HomePage()),
+          (route) => false, // ล้าง Stack ทั้งหมด รวมถึง StartPage ด้วย
         );
       } else {
         final data = jsonDecode(response.body);

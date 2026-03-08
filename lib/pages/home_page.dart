@@ -108,11 +108,6 @@ class _HomePageState extends State<HomePage> {
                               color: Color(0xFFFF6B35),
                             ),
                           ),
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Colors.grey.shade200,
-                            child: const Icon(Icons.person, color: Colors.grey),
-                          ),
                         ],
                       ),
                       GestureDetector(
